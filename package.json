@@ -1,0 +1,29 @@
+{
+  "name": "Zniszcz-Auth",
+  "version": "1.0.0",
+  "description": "Simple JWT Authorisation Micro-Service",
+  "main": "server.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:watch": "esw -w .",
+    "test": "NODE_ENV=test jest"
+  },
+  "author": "Adrian 'Zniszczo' Zniszczyński",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "eslint-watch": "^4.0.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mysql2": "^1.5.3",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.1.0",
+    "jest": "^23.4.1",
+    "supertest": "^3.1.0"
+  }
+}
