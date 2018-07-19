@@ -11,5 +11,6 @@ router.get('/', (__req, res) => {
 router.post('/login', usersController.authenticate);
 router.post('/register', usersController.create);
 router.post('/checklogin', usersController.checkLoginAvailability);
+router.post('/checkmail', usersController.checkMailAvailability);
 
 module.exports = router;

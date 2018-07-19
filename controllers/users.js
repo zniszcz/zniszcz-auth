@@ -191,4 +191,32 @@ module.exports = {
             }],
         });
     },
+    checkMailAvailability(req, res) {
+        if (req.body.mail) {
+            return User
+                .findOne({
+                    where: {
+                        mail: req.body.mail.toLowerCase(),
+                    },
+                })
+                .then((user) => {
+                    if (user === null) {
+                        res.status(200).json({
+                            message: res.__('This email is available.'),
+                        });
+                    } else {
+                        res.status(409).json({
+                            errors: [{
+                                message: res.__('This email is already taken.'),
+                            }],
+                        });
+                    }
+                });
+        }
+        return res.status(400).json({
+            errors: [{
+                message: res.__(`There's no mail passed.`),
+            }],
+        });
+    },
 };

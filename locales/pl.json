@@ -13,6 +13,10 @@
 	"You already have an account in portal. Use password reminder.": "Posiadasz już konto w serwisie. Skorzystaj z przypominania hasła.",
 	"Validation isEmail on mail failed": "Validation isEmail on mail failed",
 	"Email adress is not correct.": "Adres email jest nie poprawny",
-    "This username is already taken.": "Ta nazwa użytkownika jest zajęta",
-    "This username is available.": "Ta nazwa użytkownika jest wolna".
+	"This username is already taken.": "Ta nazwa użytkownika jest zajęta.",
+	"This username is available.": "Ta nazwa użytkownika jest wolna.",
+	"This mail is already taken.": "Ten adres email jest wolny.",
+	"This mail is available.": "Ten adres email jest wolny.",
+	"This email is already taken.": "This email is already taken.",
+	"This email is available.": "This email is available."
 }
