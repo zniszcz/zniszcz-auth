@@ -38,8 +38,8 @@ module.exports = {
             .digest('hex');
 
         const user = {
-            login: req.body.login,
-            mail: req.body.mail,
+            login: req.body.login.toLowerCase(),
+            mail: req.body.mail.toLowerCase(),
             password: passHash,
         };
 
@@ -157,8 +157,8 @@ module.exports = {
         return User
             .findOne({
                 where: (req.body.login)
-                    ? {login: req.body.login}
-                    : {mail: req.body.mail},
+                    ? {login: req.body.login.toLowerCase()}
+                    : {mail: req.body.mail.toLowerCase()},
             })
             .then(userAuthorise)
             .catch(handleUserNotFound);
