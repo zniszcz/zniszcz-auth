@@ -1,0 +1,121 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2018-07-19T17:31:40.152Z",
+	"__export_source": "insomnia.desktop.app:v5.16.6",
+	"resources": [
+		{
+			"_id": "wrk_57721edd63424a71a82b2a56a27bd138",
+			"created": 1532020220639,
+			"description": "",
+			"modified": 1532020220639,
+			"name": "Zniszcz-Auth",
+			"parentId": null,
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_0af5d8a755b1496290d7413d54ab308b",
+			"color": null,
+			"created": 1532020220656,
+			"data": {},
+			"isPrivate": false,
+			"modified": 1532020220656,
+			"name": "New Environment",
+			"parentId": "wrk_57721edd63424a71a82b2a56a27bd138",
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_5cfe109f67354ceb8f82d46db8fc28ae",
+			"cookies": [],
+			"created": 1532020220660,
+			"modified": 1532020220660,
+			"name": "Default Jar",
+			"parentId": "wrk_57721edd63424a71a82b2a56a27bd138",
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "req_7d5e589a916b46d3b5999fb43eb4bc08",
+			"authentication": {},
+			"body": {},
+			"created": 1532020235350,
+			"description": "Check version of MicroService",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1532020321314,
+			"method": "GET",
+			"modified": 1532020540369,
+			"name": "HealthCheck",
+			"parameters": [],
+			"parentId": "wrk_57721edd63424a71a82b2a56a27bd138",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": false,
+			"settingStoreCookies": false,
+			"url": "localhost:8080",
+			"_type": "request"
+		},
+		{
+			"_id": "req_0f1e2e84b7974884810229a1bca2720a",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"login\": \"login\",\n\t\"mail\": \"mail\",\n\t\"password\": \"password\"\n}"
+			},
+			"created": 1532020321264,
+			"description": "Send password and login or mail. You shoud gain JWT token and full user data in response.",
+			"headers": [
+				{
+					"id": "pair_9f53ec9517d3404386faad1cd2227238",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1532020321264,
+			"method": "POST",
+			"modified": 1532020532562,
+			"name": "Authenticate",
+			"parameters": [],
+			"parentId": "wrk_57721edd63424a71a82b2a56a27bd138",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": false,
+			"settingStoreCookies": false,
+			"url": "localhost:8080/login",
+			"_type": "request"
+		},
+		{
+			"_id": "req_deb46d3c4fd44338823b5762447bf206",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"name\": \"name\",\n\t\"mail\": \"mail\",\n\t\"password\": \"password\"\n}"
+			},
+			"created": 1532020581975,
+			"description": "If you pass all needed data (`name`, `mail`, `password`) you should gain `User` model with saved `name`, `mail` data and a token.",
+			"headers": [
+				{
+					"id": "pair_9919c74d25aa4659b193e34c16c0a5a2",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1532020321214,
+			"method": "POST",
+			"modified": 1532021436367,
+			"name": "Register",
+			"parameters": [],
+			"parentId": "wrk_57721edd63424a71a82b2a56a27bd138",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": false,
+			"settingStoreCookies": false,
+			"url": "localhost:8080/register",
+			"_type": "request"
+		}
+	]
+}
