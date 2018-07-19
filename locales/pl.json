@@ -12,6 +12,7 @@
 	"User is created.": "Utworzono użytkownika",
 	"You already have an account in portal. Use password reminder.": "Posiadasz już konto w serwisie. Skorzystaj z przypominania hasła.",
 	"Validation isEmail on mail failed": "Validation isEmail on mail failed",
-	"Email adress is not correct": "Adres email jest nie poprawny",
-	"This username isn't avalaible.": "Ta nazwa użytkownika jest zajęta"
+	"Email adress is not correct.": "Adres email jest nie poprawny",
+    "This username is already taken.": "Ta nazwa użytkownika jest zajęta",
+    "This username is available.": "Ta nazwa użytkownika jest wolna".
 }

@@ -78,8 +78,8 @@ module.exports = {
             .catch((error) => {
                 const dictionary = {
                     'mail must be unique': 'You already have an account in portal. Use password reminder.',
-                    'login must be unique': `This username isn't avalaible.`,
-                    'Validation isEmail on mail failed': 'Email adress is not correct',
+                    'login must be unique': 'This username is already taken.',
+                    'Validation isEmail on mail failed': 'Email adress is not correct.',
                 };
                 const errors = error.errors.map(({message}) => ({
                     message: res.__(dictionary[message] || message),
@@ -138,7 +138,7 @@ module.exports = {
             } else {
                 res.status(401).json({
                     errors: [{
-                        message: res.__(`Password is invalid`),
+                        message: res.__(`Password is invalid.`),
                     }],
                 });
             }
@@ -162,5 +162,33 @@ module.exports = {
             })
             .then(userAuthorise)
             .catch(handleUserNotFound);
+    },
+    checkLoginAvailability(req, res) {
+        if (req.body.login) {
+            return User
+                .findOne({
+                    where: {
+                        login: req.body.login.toLowerCase(),
+                    },
+                })
+                .then((user) => {
+                    if (user === null) {
+                        res.status(200).json({
+                            message: res.__('This username is available.'),
+                        });
+                    } else {
+                        res.status(409).json({
+                            errors: [{
+                                message: res.__('This username is already taken.'),
+                            }],
+                        });
+                    }
+                });
+        }
+        return res.status(400).json({
+            errors: [{
+                message: res.__(`There's no username passed.`),
+            }],
+        });
     },
 };
