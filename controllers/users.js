@@ -61,7 +61,18 @@ module.exports = {
                     },
                 });
             })
-            .catch((error) => res.status(400).send(error));
+            .catch((error) => {
+                const dictionary = {
+                    'mail must be unique': 'You already have an account in portal. Use password reminder.',
+                    'Validation isEmail on mail failed': 'Email adress is not correct',
+                };
+                const errors = error.errors.map(({message}) => ({
+                    message: res.__(dictionary[message] || message),
+                }));
+                res.status(400).json({
+                    errors,
+                });
+            });
     },
     authenticate(req, res) {
         const errors = [];
