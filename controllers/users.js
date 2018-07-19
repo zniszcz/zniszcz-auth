@@ -9,7 +9,7 @@ module.exports = {
     create(req, res) {
         const errors = [];
 
-        if (!req.body.name) {
+        if (!req.body.login) {
             errors.push({
                 message: res.__(`There's no username passed.`),
             });
@@ -27,7 +27,7 @@ module.exports = {
             });
         }
 
-        if (!req.body.name || !req.body.mail || !req.body.password) {
+        if (!req.body.login || !req.body.mail || !req.body.password) {
             return res.json({
                 errors,
             });
@@ -37,33 +37,48 @@ module.exports = {
             .update(req.body.password)
             .digest('hex');
 
+        const user = {
+            login: req.body.login,
+            mail: req.body.mail,
+            password: passHash,
+        };
+
+        if (req.body.name) {
+            user.name = req.body.name;
+        }
+
+        if (req.body.surname) {
+            user.surname = req.body.surname;
+        }
+
         return User
-            .create({
-                name: req.body.name,
-                mail: req.body.mail,
-                password: passHash,
-            })
-            .then(({name, mail}) => {
+            .create(user)
+            .then(({login, mail, name = '', surname = ''}) => {
                 const token = jwt.sign({
                     data: {
                         User: {
-                            name,
+                            login,
                             mail,
+                            name,
+                            surname,
                         },
                     },
                 }, secret, {expiresIn: sessionExpiration});
                 res.status(201).json({
                     message: res.__(`User is created.`),
                     User: {
-                        name,
+                        login,
                         mail,
                         token,
+                        name,
+                        surname,
                     },
                 });
             })
             .catch((error) => {
                 const dictionary = {
                     'mail must be unique': 'You already have an account in portal. Use password reminder.',
+                    'login must be unique': `This username isn't avalaible.`,
                     'Validation isEmail on mail failed': 'Email adress is not correct',
                 };
                 const errors = error.errors.map(({message}) => ({
@@ -77,7 +92,7 @@ module.exports = {
     authenticate(req, res) {
         const errors = [];
 
-        if (!req.body.mail && !req.body.name) {
+        if (!req.body.mail && !req.body.login) {
             errors.push({
                 message: res.__(`There's no username or mail passed.`),
             });
@@ -89,13 +104,13 @@ module.exports = {
             });
         }
 
-        if ((!req.body.name && !req.body.mail) || !req.body.password) {
+        if ((!req.body.login && !req.body.mail) || !req.body.password) {
             return res.json({
                 errors,
             });
         }
 
-        const userAuthorise = ({name, mail, password}) => {
+        const userAuthorise = ({login, mail, password, name, surname}) => {
             const passHash = crypto.createHmac('sha512', salt)
                 .update(req.body.password)
                 .digest('hex');
@@ -104,16 +119,20 @@ module.exports = {
                 const token = jwt.sign({
                     data: {
                         User: {
-                            name,
+                            login,
                             mail,
+                            name,
+                            surname,
                         },
                     },
                 }, secret, {expiresIn: sessionExpiration});
                 res.status(201).json({
                     User: {
-                        name,
+                        login,
                         mail,
                         token,
+                        name,
+                        surname,
                     },
                 });
             } else {
@@ -128,7 +147,7 @@ module.exports = {
         const handleUserNotFound = () => {
             res.status(400).json({
                 errors: [{
-                    message: (req.body.name)
+                    message: (req.body.login)
                         ? res.__(`There's no user with this username on database.`)
                         : res.__(`There's no user with this mail on database.`),
                 }],
@@ -137,8 +156,8 @@ module.exports = {
 
         return User
             .findOne({
-                where: (req.body.name)
-                    ? {name: req.body.name}
+                where: (req.body.login)
+                    ? {login: req.body.login}
                     : {mail: req.body.mail},
             })
             .then(userAuthorise)

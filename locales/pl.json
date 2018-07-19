@@ -11,6 +11,7 @@
 	"There was an error with creating user.": "Wystąpił błąd podczas tworzenia użytkownika",
 	"User is created.": "Utworzono użytkownika",
 	"You already have an account in portal. Use password reminder.": "Posiadasz już konto w serwisie. Skorzystaj z przypominania hasła.",
-    "Validation isEmail on mail failed": "Validation isEmail on mail failed",
-    "Email adress is not correct": "Adres email jest nie poprawny"
+	"Validation isEmail on mail failed": "Validation isEmail on mail failed",
+	"Email adress is not correct": "Adres email jest nie poprawny",
+	"This username isn't avalaible.": "Ta nazwa użytkownika jest zajęta"
 }
