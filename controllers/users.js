@@ -11,19 +11,19 @@ module.exports = {
 
         if (!req.body.name) {
             errors.push({
-                msg: res.__(`There's no username passed.`),
+                message: res.__(`There's no username passed.`),
             });
         }
 
         if (!req.body.mail) {
             errors.push({
-                msg: res.__(`There's no mail passed.`),
+                message: res.__(`There's no mail passed.`),
             });
         }
 
         if (!req.body.password) {
             errors.push({
-                msg: res.__(`There's no password passed.`),
+                message: res.__(`There's no password passed.`),
             });
         }
 
@@ -51,13 +51,13 @@ module.exports = {
 
         if (!req.body.mail && !req.body.name) {
             errors.push({
-                msg: res.__(`There's no username or mail passed.`),
+                message: res.__(`There's no username or mail passed.`),
             });
         }
 
         if (!req.body.password) {
             errors.push({
-                msg: res.__(`There's no password passed.`),
+                message: res.__(`There's no password passed.`),
             });
         }
 
@@ -91,7 +91,7 @@ module.exports = {
             } else {
                 res.status(401).json({
                     errors: [{
-                        msg: res.__(`Password is invalid`),
+                        message: res.__(`Password is invalid`),
                     }],
                 });
             }
@@ -100,7 +100,7 @@ module.exports = {
         const handleUserNotFound = () => {
             res.status(400).json({
                 errors: [{
-                    msg: (req.body.name)
+                    message: (req.body.name)
                         ? res.__(`There's no user with this username on database.`)
                         : res.__(`There's no user with this mail on database.`),
                 }],

@@ -3,7 +3,7 @@ const usersController = require('../controllers').users;
 
 router.get('/', (__req, res) => {
     res.status(200).json({
-        msg: res.__('Welcome in Authorisation Service.'),
+        message: res.__('Welcome in Authorisation Service.'),
         version: process.env.VERSION,
     });
 });
