@@ -251,7 +251,11 @@
         ],
         "quotes": [
             2,
-            "single"
+            "single",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
         ],
         "semi-spacing": 2,
         "semi": 2,

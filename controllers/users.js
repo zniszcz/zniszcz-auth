@@ -11,19 +11,19 @@ module.exports = {
 
         if (!req.body.name) {
             errors.push({
-                msg: 'nie podano nazwy użytkownika',
+                msg: res.__(`There's no username passed.`),
             });
         }
 
         if (!req.body.mail) {
             errors.push({
-                msg: 'nie podano maila',
+                msg: res.__(`There's no mail passed.`),
             });
         }
 
         if (!req.body.password) {
             errors.push({
-                msg: 'nie podano hasła',
+                msg: res.__(`There's no password passed.`),
             });
         }
 
@@ -51,13 +51,13 @@ module.exports = {
 
         if (!req.body.mail && !req.body.name) {
             errors.push({
-                msg: 'nie podano maila ani nazwy użytkownika',
+                msg: res.__(`There's no username or mail passed.`),
             });
         }
 
         if (!req.body.password) {
             errors.push({
-                msg: 'nie podano hasła',
+                msg: res.__(`There's no password passed.`),
             });
         }
 
@@ -91,7 +91,7 @@ module.exports = {
             } else {
                 res.status(401).json({
                     errors: [{
-                        msg: 'Nieprawidłowe hasło',
+                        msg: res.__(`Password is invalid`),
                     }],
                 });
             }
@@ -101,8 +101,8 @@ module.exports = {
             res.status(400).json({
                 errors: [{
                     msg: (req.body.name)
-                        ? 'Użytkownika o podanej nazwie nie ma w bazie'
-                        : 'Użytkownika o podanym mailu nie ma w bazie',
+                        ? res.__(`There's no user with this username on database.`)
+                        : res.__(`There's no user with this mail on database.`),
                 }],
             });
         };
