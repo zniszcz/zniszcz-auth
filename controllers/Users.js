@@ -1,11 +1,12 @@
 const crypto = require('crypto');
+const AbstractController = require('./AbstractController');
 const User = require('../models').User;
 const salt = require('../config/crypto.json').salt;
 const secret = require('../config/crypto.json').secret;
 const sessionExpiration = require('../config/crypto.json').sessionExpiration;
 const jwt = require('jsonwebtoken');
 
-module.exports = {
+module.exports = class UsersController extends AbstractController {
     create(req, res) {
         const errors = [];
 
@@ -88,7 +89,7 @@ module.exports = {
                     errors,
                 });
             });
-    },
+    }
     authenticate(req, res) {
         const errors = [];
 
@@ -162,7 +163,7 @@ module.exports = {
             })
             .then(userAuthorise)
             .catch(handleUserNotFound);
-    },
+    }
     checkLoginAvailability(req, res) {
         if (req.body.login) {
             return User
@@ -190,7 +191,7 @@ module.exports = {
                 message: res.__(`There's no username passed.`),
             }],
         });
-    },
+    }
     checkMailAvailability(req, res) {
         if (req.body.mail) {
             return User
@@ -218,5 +219,5 @@ module.exports = {
                 message: res.__(`There's no mail passed.`),
             }],
         });
-    },
+    }
 };

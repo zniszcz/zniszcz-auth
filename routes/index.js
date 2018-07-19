@@ -13,4 +13,10 @@ router.post('/register', usersController.create);
 router.post('/checklogin', usersController.checkLoginAvailability);
 router.post('/checkmail', usersController.checkMailAvailability);
 
+router.get('/user', usersController.secure, (__req, res) => {
+    res.json({
+        message: 'sample secured content',
+    });
+});
+
 module.exports = router;
