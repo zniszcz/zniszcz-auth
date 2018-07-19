@@ -43,7 +43,24 @@ module.exports = {
                 mail: req.body.mail,
                 password: passHash,
             })
-            .then((user) => res.status(201).send(user))
+            .then(({name, mail}) => {
+                const token = jwt.sign({
+                    data: {
+                        User: {
+                            name,
+                            mail,
+                        },
+                    },
+                }, secret, {expiresIn: sessionExpiration});
+                res.status(201).json({
+                    message: res.__(`User is created.`),
+                    User: {
+                        name,
+                        mail,
+                        token,
+                    },
+                });
+            })
             .catch((error) => res.status(400).send(error));
     },
     authenticate(req, res) {
@@ -67,24 +84,24 @@ module.exports = {
             });
         }
 
-        const userAuthorise = (user) => {
+        const userAuthorise = ({name, mail, password}) => {
             const passHash = crypto.createHmac('sha512', salt)
                 .update(req.body.password)
                 .digest('hex');
 
-            if (user.password === passHash) {
+            if (password === passHash) {
                 const token = jwt.sign({
                     data: {
-                        user: {
-                            name: user.name,
-                            mail: user.mail,
+                        User: {
+                            name,
+                            mail,
                         },
                     },
                 }, secret, {expiresIn: sessionExpiration});
                 res.status(201).json({
-                    user: {
-                        name: user.name,
-                        mail: user.mail,
+                    User: {
+                        name,
+                        mail,
                         token,
                     },
                 });
