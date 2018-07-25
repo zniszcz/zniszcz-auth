@@ -29,7 +29,7 @@ module.exports = class UsersController extends AbstractController {
         }
 
         if (!req.body.login || !req.body.mail || !req.body.password) {
-            return res.json({
+            return res.status(400).json({
                 errors,
             });
         }
@@ -54,7 +54,12 @@ module.exports = class UsersController extends AbstractController {
 
         return User
             .create(user)
-            .then(({login, mail, name = '', surname = ''}) => {
+            .then(({
+                login,
+                mail,
+                name = '',
+                surname = '',
+            }) => {
                 const token = jwt.sign({
                     data: {
                         User: {
@@ -64,7 +69,9 @@ module.exports = class UsersController extends AbstractController {
                             surname,
                         },
                     },
-                }, secret, {expiresIn: sessionExpiration});
+                }, secret, {
+                    expiresIn: sessionExpiration,
+                });
                 res.status(201).json({
                     message: res.__(`User is created.`),
                     User: {
@@ -82,7 +89,9 @@ module.exports = class UsersController extends AbstractController {
                     'login must be unique': 'This username is already taken.',
                     'Validation isEmail on mail failed': 'Email adress is not correct.',
                 };
-                const errors = error.errors.map(({message}) => ({
+                const errors = error.errors.map(({
+                    message,
+                }) => ({
                     message: res.__(dictionary[message] || message),
                 }));
                 res.status(400).json({
@@ -111,7 +120,13 @@ module.exports = class UsersController extends AbstractController {
             });
         }
 
-        const userAuthorise = ({login, mail, password, name, surname}) => {
+        const userAuthorise = ({
+            login,
+            mail,
+            password,
+            name,
+            surname,
+        }) => {
             const passHash = crypto.createHmac('sha512', salt)
                 .update(req.body.password)
                 .digest('hex');
@@ -126,7 +141,9 @@ module.exports = class UsersController extends AbstractController {
                             surname,
                         },
                     },
-                }, secret, {expiresIn: sessionExpiration});
+                }, secret, {
+                    expiresIn: sessionExpiration,
+                });
                 res.status(201).json({
                     User: {
                         login,
@@ -157,9 +174,11 @@ module.exports = class UsersController extends AbstractController {
 
         return User
             .findOne({
-                where: (req.body.login)
-                    ? {login: req.body.login.toLowerCase()}
-                    : {mail: req.body.mail.toLowerCase()},
+                where: (req.body.login) ? {
+                    login: req.body.login.toLowerCase(),
+                } : {
+                    mail: req.body.mail.toLowerCase(),
+                },
             })
             .then(userAuthorise)
             .catch(handleUserNotFound);
