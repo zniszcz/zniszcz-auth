@@ -2,6 +2,16 @@ const request = require('supertest');
 const app = require('../app');
 
 describe('Register route', () => {
+    const noUsernameErr = {
+        message: 'There\'s no username passed.',
+    };
+    const noMailErr = {
+        message: 'There\'s no mail passed.',
+    };
+    const noPasswordErr = {
+        message: 'There\'s no password passed.',
+    };
+
     test('should handle request with no data send', (done) => {
         return request(app)
             .post('/register')
@@ -9,15 +19,66 @@ describe('Register route', () => {
             .then((response) => {
                 const mock = {
                     errors: [
-                        {
-                            message: 'There\'s no username passed.',
-                        },
-                        {
-                            message: 'There\'s no mail passed.',
-                        },
-                        {
-                            message: 'There\'s no password passed.',
-                        },
+                        noUsernameErr,
+                        noMailErr,
+                        noPasswordErr,
+                    ],
+                };
+                expect(response.body).toEqual(mock);
+                done();
+            });
+    });
+
+    test('should handle request with no username send', (done) => {
+        return request(app)
+            .post('/register')
+            .send({
+                mail: 'sample@email.adress.com',
+                password: 'SamplePassword123!',
+            })
+            .expect(400)
+            .then((response) => {
+                const mock = {
+                    errors: [
+                        noUsernameErr,
+                    ],
+                };
+                expect(response.body).toEqual(mock);
+                done();
+            });
+    });
+
+    test('should handle request with no mail send', (done) => {
+        return request(app)
+            .post('/register')
+            .send({
+                login: 'sampleUsername1',
+                password: 'SamplePassword123!',
+            })
+            .expect(400)
+            .then((response) => {
+                const mock = {
+                    errors: [
+                        noMailErr,
+                    ],
+                };
+                expect(response.body).toEqual(mock);
+                done();
+            });
+    });
+
+    test('should handle request with no password send', (done) => {
+        return request(app)
+            .post('/register')
+            .send({
+                mail: 'sample@email.adress.com',
+                login: 'SampleUsername2',
+            })
+            .expect(400)
+            .then((response) => {
+                const mock = {
+                    errors: [
+                        noPasswordErr,
                     ],
                 };
                 expect(response.body).toEqual(mock);
