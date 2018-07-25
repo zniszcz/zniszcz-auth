@@ -6,7 +6,10 @@ const router = require('./routes');
 
 const i18n = require('./locale');
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+    extended: false,
+}));
+
 app.use(bodyParser.json());
 app.use(i18n.init);
 
