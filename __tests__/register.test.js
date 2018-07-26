@@ -1,12 +1,11 @@
 const request = require('supertest');
 const app = require('../app');
 const Models = require('../models');
-const childProcess = require('child_process');
 
 jest.mock('../models', () => ({
     User: {
         create: jest.fn().mockImplementation((user) => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 resolve({
                     login: user.login,
                     mail: user.mail,
@@ -107,20 +106,6 @@ describe('Register route', () => {
     });
 
     describe('Correct requests', () => {
-        beforeAll((done) => {
-            childProcess.execSync(`
-                npm run sequelize db:migrate:undo:all &&
-                npm run sequelize db:migrate
-            `);
-            done();
-        });
-
-        afterAll((done) => {
-            childProcess.execSync(`
-                npm run sequelize db:migrate:undo:all
-            `);
-            done();
-        });
 
         test('should create user when request is correct', (done) => {
             return request(app)
@@ -131,7 +116,7 @@ describe('Register route', () => {
                     password: 'SamplePassword',
                 })
                 .expect(201)
-                .then((response) => {
+                .then(() => {
                     expect(Models.User.create).toHaveBeenCalledTimes(1);
                     done();
                 });

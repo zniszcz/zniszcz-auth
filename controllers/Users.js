@@ -172,7 +172,8 @@ module.exports = class UsersController extends AbstractController {
             res.status(400).json({
                 errors: [{
                     message: (req.body.login) ?
-                        res.__(`There's no user with this username on database.`) : res.__(`There's no user with this mail on database.`),
+                        res.__(`There's no user with this username on database.`) :
+                        res.__(`There's no user with this mail on database.`),
                 }],
             });
         };
