@@ -21,6 +21,14 @@ describe('Login route', () => {
         message: 'There\'s no username or mail passed.',
     };
 
+    beforeAll(() => {
+        Models.User.findOne = jest.fn();
+    });
+
+    afterAll(() => {
+        Models.User.findOne.mockReset();
+    });
+
     describe('Bad requests', () => {
         test('should handle request with no data send', (done) => {
             return request(app)
@@ -134,6 +142,10 @@ describe('Login route', () => {
             });
         });
 
+        afterAll(() => {
+            Models.User.findOne.mockReset();
+        });
+
         test('should authorise user when correct login and password are sent', () => {
             return request(app)
                 .post('/login')
@@ -191,6 +203,14 @@ describe('Login route', () => {
             name: 'Name',
             surname: 'Surname',
         };
+
+        beforeAll(() => {
+            Models.User.findOne = jest.fn();
+        });
+
+        afterAll(() => {
+            Models.User.findOne.clear.mockReset();
+        });
 
         test('should not show authorised content with no token send', (done) => {
             return request(app)
