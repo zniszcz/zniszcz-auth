@@ -10,6 +10,9 @@ childProcess.spawn('sequelize', ['db:migrate:undo:all'])
         const line = data.toString();
         console.log(line.substr(0, line.length - 1));
     })
+    .on('error', (error) => {
+        throw error;
+    })
     .on('end', () => {
         childProcess.spawn('sequelize', ['db:migrate'])
             .stdout

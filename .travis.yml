@@ -6,6 +6,17 @@ services:
     - mysql
 
 before_install:
-    - mysql -e 'CREATE DATABASE zniszcz-auth-test;'
+    - mysql -u root -e 'CREATE DATABASE IF NOT EXISTS `zniszcz-auth-test`;'
     - cp ./config/config.json.dist ./config/config.json
     - cp ./config/crypto.json.dist ./config/crypto.json
+
+install:
+    - npm install
+
+before_script:
+    - npm run sequelize db:migrate:undo:all
+    - npm run sequelize db:migrate
+
+script:
+    - npm test
+
