@@ -16,6 +16,7 @@ install:
 before_script:
     - npm run sequelize db:migrate:undo:all
     - npm run sequelize db:migrate
+    - npm run lint
 
 script:
     - npm test
