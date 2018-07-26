@@ -9,10 +9,10 @@
     "operatorsAliases": false
   },
   "test": {
-    "username": "",
+    "username": "root",
     "password": "",
-    "database": "",
-    "host": "",
+    "database": "zniszcz-auth-test",
+    "host": "127.0.0.1",
     "dialect": "mysql",
     "PORT": 8090,
     "operatorsAliases": false
