@@ -2,6 +2,9 @@ const secret = require('../config/crypto.json').secret;
 const jwt = require('jsonwebtoken');
 
 module.exports = class AbstractController {
+    constructor(model) {
+        this.model = model;
+    }
     secure(req, res, next) {
         const token = req.get('x-access-token');
         if (token) {

@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const AbstractController = require('./AbstractController');
-const User = require('../models').User;
 const salt = require('../config/crypto.json').salt;
 const secret = require('../config/crypto.json').secret;
 const sessionExpiration = require('../config/crypto.json').sessionExpiration;
@@ -52,7 +51,7 @@ module.exports = class UsersController extends AbstractController {
             user.surname = req.body.surname;
         }
 
-        return User
+        return this.model
             .create(user)
             .then(({
                 login,
@@ -172,7 +171,7 @@ module.exports = class UsersController extends AbstractController {
             });
         };
 
-        return User
+        return this.model
             .findOne({
                 where: (req.body.login) ? {
                     login: req.body.login.toLowerCase(),
@@ -185,7 +184,7 @@ module.exports = class UsersController extends AbstractController {
     }
     checkLoginAvailability(req, res) {
         if (req.body.login) {
-            return User
+            return this.model
                 .findOne({
                     where: {
                         login: req.body.login.toLowerCase(),
@@ -213,7 +212,7 @@ module.exports = class UsersController extends AbstractController {
     }
     checkMailAvailability(req, res) {
         if (req.body.mail) {
-            return User
+            return this.model
                 .findOne({
                     where: {
                         mail: req.body.mail.toLowerCase(),
