@@ -141,4 +141,93 @@ describe('Login route', () => {
         });
     });
 
+    describe('Protected routes', () => {
+
+        const mockedUser = {
+            login: 'SampleUsername2',
+            password: 'SamplePassword',
+            mail: 'sample.mail@adress.com',
+            name: 'Name',
+            surname: 'Surname',
+        };
+
+        const mockedToken = jwt.sign({
+            data: {
+                User: {
+                    login: mockedUser.login,
+                    mail: mockedUser.mail,
+                    name: mockedUser.name,
+                    surname: mockedUser.surname,
+                },
+            },
+        }, secret, {
+            expiresIn: sessionExpiration,
+        });
+
+        test('should not show authorised content with no token send', (done) => {
+            return request(app)
+                .get('/user')
+                .expect(401)
+                .then((response) => {
+                    expect(response.body).toEqual({
+                        errors: [
+                            {
+                                message: 'You are trying achieve secured content.',
+                            },
+                        ],
+                    });
+                    done();
+                });
+        });
+
+        test('should not show authorised content with incorrect token send', (done) => {
+            return request(app)
+                .get('/user')
+                .set('x-access-token', 'wrong.jwt.token')
+                .expect(400)
+                .then((response) => {
+                    expect(response.body).toEqual({
+                        errors: [
+                            {
+                                message: 'Token is incorrect.',
+                            },
+                        ],
+                    });
+                    done();
+                });
+        });
+
+        test('should not show authorised content with expired token send', (done) => {
+            const token = jwt.sign({
+                data: {
+                    User: {
+                        login: mockedUser.login,
+                        mail: mockedUser.mail,
+                        name: mockedUser.name,
+                        surname: mockedUser.surname,
+                    },
+                },
+            }, secret, {
+                expiresIn: 1,
+            });
+
+            return setTimeout(() => {
+                request(app)
+                    .get('/user')
+                    .set('x-access-token', token)
+                    .expect(401)
+                    .then((response) => {
+                        expect(response.body).toEqual({
+                            errors: [
+                                {
+                                    message: 'Token expired.',
+                                },
+                            ],
+                        });
+                        done();
+                    });
+            }, 2000);
+        });
+    });
+
 });
