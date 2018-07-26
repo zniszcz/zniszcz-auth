@@ -14,7 +14,6 @@ jest.mock('../models', () => ({
                 });
             });
         }),
-        findOne: jest.fn(),
     },
 }));
 
