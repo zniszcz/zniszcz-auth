@@ -3,9 +3,8 @@
 	"There's no username passed.": "Nie podano nazwy użytkownika.",
 	"There's no password passed.": "Nie podano hasła.",
 	"There's no mail passed.": "Nie podano maila.",
-	"Password is invalid": "Niepoprawne hasło.",
+	"Password is invalid.": "Niepoprawne hasło.",
 	"There's no username or mail passed.": "Nie podano nazwy użytkownika ani maila.",
-	"Welcome in Authorisation Service": "Welcome in Authorisation Service",
 	"There's no user with this username on database.": "Użytkownika o podanej nazwie nie ma w bazie",
 	"There's no user with this mail on database.": "Użytkownika o podanym mailu nie ma w bazie",
 	"There was an error with creating user.": "Wystąpił błąd podczas tworzenia użytkownika",
@@ -17,9 +16,8 @@
 	"This username is available.": "Ta nazwa użytkownika jest wolna.",
 	"This mail is already taken.": "Ten adres email jest wolny.",
 	"This mail is available.": "Ten adres email jest wolny.",
-	"This email is already taken.": "This email is already taken.",
-	"This email is available.": "This email is available.",
 	"You are trying achieve secured content.": "Próbujesz dostać się do zasobów zabezpieczonych.",
 	"Token is incorrect.": "Token jest niepoprawny",
-	"Token expired.": "Token wygasł."
+    "Token expired.": "Token wygasł.",
+    "Sample secured content.": "Przykładowa chroniona treść."
 }

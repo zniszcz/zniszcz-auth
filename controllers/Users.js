@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const AbstractController = require('./AbstractController');
-const User = require('../models').User;
 const salt = require('../config/crypto.json').salt;
 const secret = require('../config/crypto.json').secret;
 const sessionExpiration = require('../config/crypto.json').sessionExpiration;
@@ -29,7 +28,7 @@ module.exports = class UsersController extends AbstractController {
         }
 
         if (!req.body.login || !req.body.mail || !req.body.password) {
-            return res.json({
+            return res.status(400).json({
                 errors,
             });
         }
@@ -52,9 +51,14 @@ module.exports = class UsersController extends AbstractController {
             user.surname = req.body.surname;
         }
 
-        return User
+        return this.model
             .create(user)
-            .then(({login, mail, name = '', surname = ''}) => {
+            .then(({
+                login,
+                mail,
+                name = '',
+                surname = '',
+            }) => {
                 const token = jwt.sign({
                     data: {
                         User: {
@@ -64,7 +68,9 @@ module.exports = class UsersController extends AbstractController {
                             surname,
                         },
                     },
-                }, secret, {expiresIn: sessionExpiration});
+                }, secret, {
+                    expiresIn: sessionExpiration,
+                });
                 res.status(201).json({
                     message: res.__(`User is created.`),
                     User: {
@@ -82,9 +88,18 @@ module.exports = class UsersController extends AbstractController {
                     'login must be unique': 'This username is already taken.',
                     'Validation isEmail on mail failed': 'Email adress is not correct.',
                 };
-                const errors = error.errors.map(({message}) => ({
-                    message: res.__(dictionary[message] || message),
-                }));
+                let errors;
+                if (error.errors && error.errors.length) {
+                    errors = error.errors.map(({
+                        message,
+                    }) => ({
+                        message: res.__(dictionary[message] || message),
+                    }));
+                } else {
+                    errors = [
+                        error,
+                    ];
+                }
                 res.status(400).json({
                     errors,
                 });
@@ -106,12 +121,18 @@ module.exports = class UsersController extends AbstractController {
         }
 
         if ((!req.body.login && !req.body.mail) || !req.body.password) {
-            return res.json({
+            return res.status(400).json({
                 errors,
             });
         }
 
-        const userAuthorise = ({login, mail, password, name, surname}) => {
+        const userAuthorise = ({
+            login,
+            mail,
+            password,
+            name,
+            surname,
+        }) => {
             const passHash = crypto.createHmac('sha512', salt)
                 .update(req.body.password)
                 .digest('hex');
@@ -126,7 +147,9 @@ module.exports = class UsersController extends AbstractController {
                             surname,
                         },
                     },
-                }, secret, {expiresIn: sessionExpiration});
+                }, secret, {
+                    expiresIn: sessionExpiration,
+                });
                 res.status(201).json({
                     User: {
                         login,
@@ -146,7 +169,7 @@ module.exports = class UsersController extends AbstractController {
         };
 
         const handleUserNotFound = () => {
-            res.status(400).json({
+            res.status(404).json({
                 errors: [{
                     message: (req.body.login)
                         ? res.__(`There's no user with this username on database.`)
@@ -155,21 +178,24 @@ module.exports = class UsersController extends AbstractController {
             });
         };
 
-        return User
+        return this.model
             .findOne({
-                where: (req.body.login)
-                    ? {login: req.body.login.toLowerCase()}
-                    : {mail: req.body.mail.toLowerCase()},
+                where: (req.body.login) ? {
+                    login: req.body.login.toLowerCase(),
+                } : {
+                    mail: req.body.mail.toLowerCase(),
+                },
             })
             .then(userAuthorise)
             .catch(handleUserNotFound);
     }
     checkLoginAvailability(req, res) {
-        if (req.body.login) {
-            return User
+        const login = req.query.login;
+        const handlePassedLogin = () => {
+            this.model
                 .findOne({
                     where: {
-                        login: req.body.login.toLowerCase(),
+                        login: login.toLowerCase(),
                     },
                 })
                 .then((user) => {
@@ -185,39 +211,52 @@ module.exports = class UsersController extends AbstractController {
                         });
                     }
                 });
-        }
-        return res.status(400).json({
-            errors: [{
-                message: res.__(`There's no username passed.`),
-            }],
-        });
+        };
+        const handleNoLogin = () => {
+            res.status(400).json({
+                errors: [{
+                    message: res.__(`There's no username passed.`),
+                }],
+            });
+        };
+
+        return (login)
+            ? handlePassedLogin()
+            : handleNoLogin();
     }
     checkMailAvailability(req, res) {
-        if (req.body.mail) {
-            return User
+        const mail = req.query.mail;
+        const handlePassedMail = () => {
+            this.model
                 .findOne({
                     where: {
-                        mail: req.body.mail.toLowerCase(),
+                        mail: mail.toLowerCase(),
                     },
                 })
                 .then((user) => {
                     if (user === null) {
                         res.status(200).json({
-                            message: res.__('This email is available.'),
+                            message: res.__('This mail is available.'),
                         });
                     } else {
                         res.status(409).json({
                             errors: [{
-                                message: res.__('This email is already taken.'),
+                                message: res.__('This mail is already taken.'),
                             }],
                         });
                     }
                 });
-        }
-        return res.status(400).json({
-            errors: [{
-                message: res.__(`There's no mail passed.`),
-            }],
-        });
+        };
+        const handleNoMail = () => {
+            res.status(400).json({
+                errors: [{
+                    message: res.__(`There's no mail passed.`),
+                }],
+            });
+        };
+
+        return (mail)
+            ? handlePassedMail()
+            : handleNoMail();
     }
 };
