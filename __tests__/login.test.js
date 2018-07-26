@@ -55,6 +55,35 @@ describe('Login route', () => {
                     done();
                 });
         });
+
+        test('should handle wrong password sent', (done) => {
+            Models.User.findOne.mockImplementation(() => {
+                return new Promise((resolve) => {
+                    resolve({
+                        password: 'Some random not valid hash',
+                    });
+                });
+            });
+
+            return request(app)
+                .post('/login')
+                .send({
+                    login: 'SampleUsername2',
+                    password: 'Some-other-password2!',
+                })
+                .expect(400)
+                .then((response) => {
+                    const mock = {
+                        errors: [
+                            {
+                                message: 'Password is invalid.',
+                            },
+                        ],
+                    };
+                    expect(response.body).toEqual(mock);
+                    done();
+                });
+        });
     });
 
     describe('Correct requests', () => {

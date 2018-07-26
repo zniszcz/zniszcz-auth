@@ -9,8 +9,8 @@ jest.mock('../models', () => ({
                 resolve({
                     login: user.login,
                     mail: user.mail,
-                    name: '',
-                    surname: '',
+                    name: user.name || '',
+                    surname: user.surname || '',
                 });
             });
         }),
@@ -41,6 +41,24 @@ describe('Register route', () => {
                 .expect(201)
                 .then(() => {
                     expect(Models.User.create).toHaveBeenCalledTimes(1);
+                    done();
+                });
+        });
+
+        test('should save name and surname when passed', (done) => {
+            return request(app)
+                .post('/register')
+                .send({
+                    name: 'Name',
+                    surname: 'Surname',
+                    mail: 'sample@email.adress.com',
+                    login: 'SampleUsername2',
+                    password: 'SamplePassword',
+                })
+                .expect(201)
+                .then((response) => {
+                    expect(response.body.User.name).toBe('Name');
+                    expect(response.body.User.surname).toBe('Surname');
                     done();
                 });
         });
@@ -133,7 +151,7 @@ describe('Register route', () => {
                     reject({
                         errors: [
                             {
-                                message: 'Email adress is not correct.',
+                                message: 'Validation isEmail on mail failed',
                             },
                         ],
                     });
@@ -160,6 +178,77 @@ describe('Register route', () => {
                     done();
                 });
         });
-    });
 
+        test('should handle taken mail registring try', (done) => {
+
+            Models.User.create.mockImplementation(() => {
+                return new Promise((__resolve, reject) => {
+                    reject({
+                        errors: [
+                            {
+                                message: 'mail must be unique',
+                            },
+                        ],
+                    });
+                });
+            });
+
+            return request(app)
+                .post('/register')
+                .send({
+                    mail: 'sample@used.mail.com',
+                    login: 'SampleUsername2',
+                    password: 'SamplePassword2!',
+                })
+                .expect(400)
+                .then((response) => {
+                    const mock = {
+                        errors: [
+                            {
+                                message: 'You already have an account in portal. Use password reminder.',
+                            },
+                        ],
+                    };
+                    expect(response.body).toEqual(mock);
+                    done();
+
+                });
+        });
+
+        test('should handle taken username registring try', (done) => {
+
+            Models.User.create.mockImplementation(() => {
+                return new Promise((__resolve, reject) => {
+                    reject({
+                        errors: [
+                            {
+                                message: 'login must be unique',
+                            },
+                        ],
+                    });
+                });
+            });
+
+            return request(app)
+                .post('/register')
+                .send({
+                    mail: 'wrong email adress',
+                    login: 'SampleUsername2',
+                    password: 'SamplePassword2!',
+                })
+                .expect(400)
+                .then((response) => {
+                    const mock = {
+                        errors: [
+                            {
+                                message: 'This username is already taken.',
+                            },
+                        ],
+                    };
+                    expect(response.body).toEqual(mock);
+                    done();
+
+                });
+        });
+    });
 });
