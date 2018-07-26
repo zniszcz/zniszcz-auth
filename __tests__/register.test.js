@@ -1,10 +1,10 @@
 const request = require('supertest');
 const app = require('../app');
-const Models = require('../models/index');
+const Models = require('../models');
 const childProcess = require('child_process');
 
-jest.mock('../models/index', () => ({
-    users: {
+jest.mock('../models', () => ({
+    User: {
         create: jest.fn().mockImplementation((user) => {
             return new Promise((resolve, reject) => {
                 resolve({
@@ -124,10 +124,9 @@ describe('Register route', () => {
                     login: 'SampleUsername2',
                     password: 'SamplePassword',
                 })
-                // .expect(201)
+                .expect(201)
                 .then((response) => {
-                    console.log(JSON.stringify(response.text));
-                    expect(Models.users.create).toHaveBeenCalledTimes(1);
+                    expect(Models.User.create).toHaveBeenCalledTimes(1);
                     done();
                 });
         });
