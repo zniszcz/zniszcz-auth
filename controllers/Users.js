@@ -121,7 +121,7 @@ module.exports = class UsersController extends AbstractController {
         }
 
         if ((!req.body.login && !req.body.mail) || !req.body.password) {
-            return res.json({
+            return res.status(400).json({
                 errors,
             });
         }
@@ -171,9 +171,9 @@ module.exports = class UsersController extends AbstractController {
         const handleUserNotFound = () => {
             res.status(400).json({
                 errors: [{
-                    message: (req.body.login) ?
-                        res.__(`There's no user with this username on database.`) :
-                        res.__(`There's no user with this mail on database.`),
+                    message: (req.body.login)
+                        ? res.__(`There's no user with this username on database.`)
+                        : res.__(`There's no user with this mail on database.`),
                 }],
             });
         };
