@@ -60,15 +60,28 @@ describe('Login route', () => {
 
     describe('Correct requests', () => {
 
-        test('should authorise user when correct login and password are sent', (done) => {
-            const mockedUser = {
-                login: 'SampleUsername2',
-                password: 'SamplePassword',
-                mail: 'sample.mail@adress.com',
-                name: 'Name',
-                surname: 'Surname',
-            };
+        const mockedUser = {
+            login: 'SampleUsername2',
+            password: 'SamplePassword',
+            mail: 'sample.mail@adress.com',
+            name: 'Name',
+            surname: 'Surname',
+        };
 
+        const mockedToken = jwt.sign({
+            data: {
+                User: {
+                    login: mockedUser.login,
+                    mail: mockedUser.mail,
+                    name: mockedUser.name,
+                    surname: mockedUser.surname,
+                },
+            },
+        }, secret, {
+            expiresIn: sessionExpiration,
+        });
+
+        beforeAll(() => {
             Models.User.findOne.mockImplementation(() => {
                 return new Promise((resolve) => {
                     mockedUser.password = crypto.createHmac('sha512', salt)
@@ -77,29 +90,26 @@ describe('Login route', () => {
                     resolve(mockedUser);
                 });
             });
+        });
 
-            const mockedToken = jwt.sign({
-                data: {
-                    User: {
-                        login: mockedUser.login,
-                        mail: mockedUser.mail,
-                        name: mockedUser.name,
-                        surname: mockedUser.surname,
-                    },
-                },
-            }, secret, {
-                expiresIn: sessionExpiration,
-            });
-
+        test('should authorise user when correct login and password are sent', () => {
             return request(app)
                 .post('/login')
                 .send({
                     login: mockedUser.login,
                     password: mockedUser.password,
                 })
-                .expect(201)
-                .then((response) => {
+                .expect(201);
+        });
 
+        test('should return user model after correct authorisation', (done) => {
+            return request(app)
+                .post('/login')
+                .send({
+                    login: mockedUser.login,
+                    password: mockedUser.password,
+                })
+                .then((response) => {
                     expect(JSON.parse(response.text)).toEqual({
                         User: {
                             login: mockedUser.login,
@@ -110,6 +120,23 @@ describe('Login route', () => {
                         },
                     });
                     done();
+                });
+        });
+
+        test('should return correct token after correct authorisation', (done) => {
+            return request(app)
+                .post('/login')
+                .send({
+                    login: mockedUser.login,
+                    password: mockedUser.password,
+                })
+                .then((response) => {
+                    const body = JSON.parse(response.text);
+                    const token = body.User.token;
+                    jwt.verify(token, secret, (error) => {
+                        expect(error).not.toBeTruthy();
+                        done();
+                    });
                 });
         });
     });
