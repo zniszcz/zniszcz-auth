@@ -31,6 +31,17 @@ describe('Register route', () => {
     describe('Correct requests', () => {
 
         test('should create user when request is correct', (done) => {
+            Models.User.create = jest.fn().mockImplementation((user) => {
+                return new Promise((resolve) => {
+                    resolve({
+                        login: user.login,
+                        mail: user.mail,
+                        name: user.name || '',
+                        surname: user.surname || '',
+                    });
+                });
+            });
+
             return request(app)
                 .post('/register')
                 .send({
