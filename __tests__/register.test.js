@@ -107,11 +107,17 @@ describe('Register route', () => {
     });
 
     describe('Correct requests', () => {
-
         beforeAll((done) => {
             childProcess.execSync(`
                 npm run sequelize db:migrate:undo:all &&
                 npm run sequelize db:migrate
+            `);
+            done();
+        });
+
+        afterAll((done) => {
+            childProcess.execSync(`
+                npm run sequelize db:migrate:undo:all
             `);
             done();
         });
