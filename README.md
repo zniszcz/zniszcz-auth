@@ -1,10 +1,11 @@
 # Zniszcz-Auth
+[![Build Status](https://travis-ci.org/zniszcz/zniszcz-auth.svg?branch=master)](https://travis-ci.org/zniszcz/zniszcz-auth)
 Simple JWT Authorisation Micro-Service
 
 ## Installation
 1. Install dependencies
 
-``` 
+```
 $ npm install
 ```
 
