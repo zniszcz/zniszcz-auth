@@ -1,5 +1,23 @@
 const request = require('supertest');
 const app = require('../app');
+const Models = require('../models/index');
+const childProcess = require('child_process');
+
+jest.mock('../models/index', () => ({
+    users: {
+        create: jest.fn().mockImplementation((user) => {
+            return new Promise((resolve, reject) => {
+                resolve({
+                    login: user.login,
+                    mail: user.mail,
+                    name: '',
+                    surname: '',
+                });
+            });
+        }),
+        findOne: jest.fn(),
+    },
+}));
 
 describe('Register route', () => {
     const noUsernameErr = {
@@ -89,9 +107,15 @@ describe('Register route', () => {
     });
 
     describe('Correct requests', () => {
-        let mockedModel = {
-            find
-        };
+
+        beforeAll((done) => {
+            childProcess.execSync(`
+                npm run sequelize db:migrate:undo:all &&
+                npm run sequelize db:migrate
+            `);
+            done();
+        });
+
         test('should create user when request is correct', (done) => {
             return request(app)
                 .post('/register')
@@ -100,7 +124,12 @@ describe('Register route', () => {
                     login: 'SampleUsername2',
                     password: 'SamplePassword',
                 })
-                .expect(201, done);
+                // .expect(201)
+                .then((response) => {
+                    console.log(JSON.stringify(response.text));
+                    expect(Models.users.create).toHaveBeenCalledTimes(1);
+                    done();
+                });
         });
     });
 

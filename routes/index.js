@@ -8,10 +8,10 @@ router.get('/', (__req, res) => {
     });
 });
 
-router.post('/login', usersController.authenticate);
-router.post('/register', usersController.create);
-router.post('/checklogin', usersController.checkLoginAvailability);
-router.post('/checkmail', usersController.checkMailAvailability);
+router.post('/login', usersController.authenticate.bind(usersController));
+router.post('/register', usersController.create.bind(usersController));
+router.post('/checklogin', usersController.checkLoginAvailability.bind(usersController));
+router.post('/checkmail', usersController.checkMailAvailability.bind(usersController));
 
 router.get('/user', usersController.secure, (__req, res) => {
     res.json({

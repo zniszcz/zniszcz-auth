@@ -88,11 +88,18 @@ module.exports = class UsersController extends AbstractController {
                     'login must be unique': 'This username is already taken.',
                     'Validation isEmail on mail failed': 'Email adress is not correct.',
                 };
-                const errors = error.errors.map(({
-                    message,
-                }) => ({
-                    message: res.__(dictionary[message] || message),
-                }));
+                let errors;
+                if (error.errors && error.errors.length) {
+                    errors = error.errors.map(({
+                        message,
+                    }) => ({
+                        message: res.__(dictionary[message] || message),
+                    }));
+                } else {
+                    errors = [
+                        error,
+                    ];
+                }
                 res.status(400).json({
                     errors,
                 });
@@ -164,9 +171,8 @@ module.exports = class UsersController extends AbstractController {
         const handleUserNotFound = () => {
             res.status(400).json({
                 errors: [{
-                    message: (req.body.login)
-                        ? res.__(`There's no user with this username on database.`)
-                        : res.__(`There's no user with this mail on database.`),
+                    message: (req.body.login) ?
+                        res.__(`There's no user with this username on database.`) : res.__(`There's no user with this mail on database.`),
                 }],
             });
         };
