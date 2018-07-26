@@ -169,7 +169,7 @@ module.exports = class UsersController extends AbstractController {
         };
 
         const handleUserNotFound = () => {
-            res.status(400).json({
+            res.status(404).json({
                 errors: [{
                     message: (req.body.login)
                         ? res.__(`There's no user with this username on database.`)

@@ -84,6 +84,33 @@ describe('Login route', () => {
                     done();
                 });
         });
+
+        test('should handle non existing user', (done) => {
+            Models.User.findOne.mockImplementation(() => {
+                return new Promise((__resolve, reject) => {
+                    reject();
+                });
+            });
+
+            return request(app)
+                .post('/login')
+                .send({
+                    login: 'SampleUsername2',
+                    password: 'Some-other-password2!',
+                })
+                .expect(404)
+                .then((response) => {
+                    const mock = {
+                        errors: [
+                            {
+                                message: `There's no user with this username on database.`,
+                            },
+                        ],
+                    };
+                    expect(response.body).toEqual(mock);
+                    done();
+                });
+        });
     });
 
     describe('Correct requests', () => {
