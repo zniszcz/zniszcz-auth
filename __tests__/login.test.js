@@ -110,11 +110,10 @@ describe('Login route', () => {
                     password: mockedUser.password,
                 })
                 .then((response) => {
-                    expect(JSON.parse(response.text)).toEqual({
+                    expect(response.body).toMatchObject({
                         User: {
                             login: mockedUser.login,
                             mail: mockedUser.mail,
-                            token: mockedToken,
                             name: mockedUser.name,
                             surname: mockedUser.surname,
                         },
