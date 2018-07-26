@@ -231,18 +231,16 @@ describe('Login route', () => {
                 expiresIn: sessionExpiration,
             });
 
-            return setTimeout(() => {
-                request(app)
-                    .get('/user')
-                    .set('x-access-token', token)
-                    .expect(200)
-                    .then((response) => {
-                        expect(response.body).toEqual({
-                            message: 'Sample secured content.',
-                        });
-                        done();
+            return request(app)
+                .get('/user')
+                .set('x-access-token', token)
+                .expect(200)
+                .then((response) => {
+                    expect(response.body).toEqual({
+                        message: 'Sample secured content.',
                     });
-            }, 2000);
+                    done();
+                });
         });
     });
 
