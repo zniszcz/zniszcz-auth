@@ -3,7 +3,7 @@
 	"There's no username passed.": "There's no username passed.",
 	"There's no password passed.": "There's no password passed.",
 	"There's no mail passed.": "There's no mail passed.",
-	"Password is invalid": "Password is invalid",
+	"Password is invalid.": "Password is invalid",
 	"There's no username or mail passed.": "There's no username or mail passed.",
 	"There's no user with this username on database.": "There's no user with this username on database.",
 	"There's no user with this mail on database.": "There's no user with this mail on database.",
@@ -19,5 +19,5 @@
 	"You are trying achieve secured content.": "You are trying achieve secured content.",
 	"Token is incorrect.": "Token is incorrect.",
 	"Token expired.": "Token expired.",
-    "Sample secured content.": "Sample secured content."
+	"Sample secured content.": "Sample secured content."
 }

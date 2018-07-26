@@ -3,7 +3,7 @@
 	"There's no username passed.": "Nie podano nazwy użytkownika.",
 	"There's no password passed.": "Nie podano hasła.",
 	"There's no mail passed.": "Nie podano maila.",
-	"Password is invalid": "Niepoprawne hasło.",
+	"Password is invalid.": "Niepoprawne hasło.",
 	"There's no username or mail passed.": "Nie podano nazwy użytkownika ani maila.",
 	"There's no user with this username on database.": "Użytkownika o podanej nazwie nie ma w bazie",
 	"There's no user with this mail on database.": "Użytkownika o podanym mailu nie ma w bazie",
