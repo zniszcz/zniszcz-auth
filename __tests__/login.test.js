@@ -151,19 +151,6 @@ describe('Login route', () => {
             surname: 'Surname',
         };
 
-        const mockedToken = jwt.sign({
-            data: {
-                User: {
-                    login: mockedUser.login,
-                    mail: mockedUser.mail,
-                    name: mockedUser.name,
-                    surname: mockedUser.surname,
-                },
-            },
-        }, secret, {
-            expiresIn: sessionExpiration,
-        });
-
         test('should not show authorised content with no token send', (done) => {
             return request(app)
                 .get('/user')
@@ -223,6 +210,35 @@ describe('Login route', () => {
                                     message: 'Token expired.',
                                 },
                             ],
+                        });
+                        done();
+                    });
+            }, 2000);
+        });
+
+        test('should show authorised content with correct token send', (done) => {
+
+            const token = jwt.sign({
+                data: {
+                    User: {
+                        login: mockedUser.login,
+                        mail: mockedUser.mail,
+                        name: mockedUser.name,
+                        surname: mockedUser.surname,
+                    },
+                },
+            }, secret, {
+                expiresIn: sessionExpiration,
+            });
+
+            return setTimeout(() => {
+                request(app)
+                    .get('/user')
+                    .set('x-access-token', token)
+                    .expect(200)
+                    .then((response) => {
+                        expect(response.body).toEqual({
+                            message: 'Sample secured content.',
                         });
                         done();
                     });
