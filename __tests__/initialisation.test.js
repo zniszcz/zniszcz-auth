@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
+const locale = require('../locale');
 
 const CURRENT_VERSION = require('child_process')
     .execSync('git rev-parse --short HEAD')
@@ -30,5 +31,11 @@ describe('HealthCheck', () => {
                 expect(response.body.message).toEqual('Welcome in Authorisation Service.');
                 done();
             });
+    });
+});
+
+describe('Language', () => {
+    test('should be english by default', () => {
+        expect(locale.getLocale()).toBe('en');
     });
 });
