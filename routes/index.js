@@ -15,7 +15,7 @@ router.get('/checkmail', usersController.checkMailAvailability.bind(usersControl
 
 router.get('/user', usersController.secure, (__req, res) => {
     res.json({
-        message: 'sample secured content',
+        message: res.__('Sample secured content.'),
     });
 });
 

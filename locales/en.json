@@ -18,5 +18,6 @@
 	"This mail is available.": "This mail is available.",
 	"You are trying achieve secured content.": "You are trying achieve secured content.",
 	"Token is incorrect.": "Token is incorrect.",
-	"Token expired.": "Token expired."
+	"Token expired.": "Token expired.",
+    "Sample secured content.": "Sample secured content."
 }
