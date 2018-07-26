@@ -1,5 +1,5 @@
 {
-    "salt": "",
-    "secret": "",
+    "salt": "sample-salt",
+    "secret": "sample-secret",
     "sessionExpiration": "2 days"
 }
