@@ -71,7 +71,7 @@ describe('Login route', () => {
                     login: 'SampleUsername2',
                     password: 'Some-other-password2!',
                 })
-                .expect(400)
+                .expect(401)
                 .then((response) => {
                     const mock = {
                         errors: [
