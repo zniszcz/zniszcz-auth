@@ -1,4 +1,4 @@
-# Zniszcz-Auth [![Build Status](https://travis-ci.org/zniszcz/zniszcz-auth.svg?branch=master)](https://travis-ci.org/zniszcz/zniszcz-auth)
+# Zniszcz-Auth [![Build Status](https://travis-ci.org/zniszcz/zniszcz-auth.svg?branch=master)](https://travis-ci.org/zniszcz/zniszcz-auth) [![Coverage Status](https://coveralls.io/repos/github/zniszcz/zniszcz-auth/badge.svg?branch=master)](https://coveralls.io/github/zniszcz/zniszcz-auth?branch=master)
 Simple JWT Authorisation Micro-Service
 
 ## Installation
