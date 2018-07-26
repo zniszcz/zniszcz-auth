@@ -28,7 +28,30 @@ describe('Register route', () => {
         message: 'There\'s no password passed.',
     };
 
+    describe('Correct requests', () => {
+
+        test('should create user when request is correct', (done) => {
+            return request(app)
+                .post('/register')
+                .send({
+                    mail: 'sample@email.adress.com',
+                    login: 'SampleUsername2',
+                    password: 'SamplePassword',
+                })
+                .expect(201)
+                .then(() => {
+                    expect(Models.User.create).toHaveBeenCalledTimes(1);
+                    done();
+                });
+        });
+    });
+
     describe('Bad requests', () => {
+
+        afterAll(() => {
+            jest.clearAllMocks();
+        });
+
         test('should handle request with no data send', (done) => {
             return request(app)
                 .post('/register')
@@ -102,21 +125,38 @@ describe('Register route', () => {
                     done();
                 });
         });
-    });
 
-    describe('Correct requests', () => {
+        test('should handle request with incorrect mail', (done) => {
 
-        test('should create user when request is correct', (done) => {
+            Models.User.create.mockImplementation(() => {
+                return new Promise((__resolve, reject) => {
+                    reject({
+                        errors: [
+                            {
+                                message: 'Email adress is not correct.',
+                            },
+                        ],
+                    });
+                });
+            });
+
             return request(app)
                 .post('/register')
                 .send({
-                    mail: 'sample@email.adress.com',
+                    mail: 'wrong email adress',
                     login: 'SampleUsername2',
-                    password: 'SamplePassword',
+                    password: 'SamplePassword2!',
                 })
-                .expect(201)
-                .then(() => {
-                    expect(Models.User.create).toHaveBeenCalledTimes(1);
+                .expect(400)
+                .then((response) => {
+                    const mock = {
+                        errors: [
+                            {
+                                message: 'Email adress is not correct.',
+                            },
+                        ],
+                    };
+                    expect(response.body).toEqual(mock);
                     done();
                 });
         });

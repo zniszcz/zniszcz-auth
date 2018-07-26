@@ -38,7 +38,6 @@ describe('Login route', () => {
                 });
         });
 
-
         test('should handle request with no password send', (done) => {
             return request(app)
                 .post('/login')
@@ -67,19 +66,6 @@ describe('Login route', () => {
             name: 'Name',
             surname: 'Surname',
         };
-
-        const mockedToken = jwt.sign({
-            data: {
-                User: {
-                    login: mockedUser.login,
-                    mail: mockedUser.mail,
-                    name: mockedUser.name,
-                    surname: mockedUser.surname,
-                },
-            },
-        }, secret, {
-            expiresIn: sessionExpiration,
-        });
 
         beforeAll(() => {
             Models.User.findOne.mockImplementation(() => {
