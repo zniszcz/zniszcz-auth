@@ -6,7 +6,7 @@
     "scripts": {
         "lint": "eslint .",
         "lint:watch": "esw -w .",
-        "test": "NODE_ENV=test && LANGUAGE=en && jest",
+        "test": "NODE_ENV=test && LANGUAGE=en && jest --coverage",
         "sequelize": "sequelize"
     },
     "author": "Adrian 'Zniszczo' Zniszczyński",
