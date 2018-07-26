@@ -190,11 +190,12 @@ module.exports = class UsersController extends AbstractController {
             .catch(handleUserNotFound);
     }
     checkLoginAvailability(req, res) {
-        if (req.body.login) {
-            return this.model
+        const login = req.query.login;
+        const handlePassedLogin = () => {
+            this.model
                 .findOne({
                     where: {
-                        login: req.body.login.toLowerCase(),
+                        login: login.toLowerCase(),
                     },
                 })
                 .then((user) => {
@@ -210,39 +211,52 @@ module.exports = class UsersController extends AbstractController {
                         });
                     }
                 });
-        }
-        return res.status(400).json({
-            errors: [{
-                message: res.__(`There's no username passed.`),
-            }],
-        });
+        };
+        const handleNoLogin = () => {
+            res.status(400).json({
+                errors: [{
+                    message: res.__(`There's no username passed.`),
+                }],
+            });
+        };
+
+        return (login)
+            ? handlePassedLogin()
+            : handleNoLogin();
     }
     checkMailAvailability(req, res) {
-        if (req.body.mail) {
-            return this.model
+        const mail = req.query.mail;
+        const handlePassedMail = () => {
+            this.model
                 .findOne({
                     where: {
-                        mail: req.body.mail.toLowerCase(),
+                        mail: mail.toLowerCase(),
                     },
                 })
                 .then((user) => {
                     if (user === null) {
                         res.status(200).json({
-                            message: res.__('This email is available.'),
+                            message: res.__('This mail is available.'),
                         });
                     } else {
                         res.status(409).json({
                             errors: [{
-                                message: res.__('This email is already taken.'),
+                                message: res.__('This mail is already taken.'),
                             }],
                         });
                     }
                 });
-        }
-        return res.status(400).json({
-            errors: [{
-                message: res.__(`There's no mail passed.`),
-            }],
-        });
+        };
+        const handleNoMail = () => {
+            res.status(400).json({
+                errors: [{
+                    message: res.__(`There's no mail passed.`),
+                }],
+            });
+        };
+
+        return (mail)
+            ? handlePassedMail()
+            : handleNoMail();
     }
 };

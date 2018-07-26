@@ -10,8 +10,8 @@ router.get('/', (__req, res) => {
 
 router.post('/login', usersController.authenticate.bind(usersController));
 router.post('/register', usersController.create.bind(usersController));
-router.post('/checklogin', usersController.checkLoginAvailability.bind(usersController));
-router.post('/checkmail', usersController.checkMailAvailability.bind(usersController));
+router.get('/checklogin', usersController.checkLoginAvailability.bind(usersController));
+router.get('/checkmail', usersController.checkMailAvailability.bind(usersController));
 
 router.get('/user', usersController.secure, (__req, res) => {
     res.json({
