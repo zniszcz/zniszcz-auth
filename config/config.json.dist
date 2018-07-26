@@ -5,7 +5,8 @@
     "database": "",
     "host": "",
     "dialect": "mysql",
-    "PORT": 8080
+    "PORT": 8080,
+    "operatorsAliases": false
   },
   "test": {
     "username": "",
@@ -13,6 +14,7 @@
     "database": "",
     "host": "",
     "dialect": "mysql",
-    "PORT": 8090
+    "PORT": 8090,
+    "operatorsAliases": false
   }
 }
